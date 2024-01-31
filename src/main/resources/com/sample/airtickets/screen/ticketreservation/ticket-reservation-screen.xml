@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<window xmlns="http://jmix.io/schema/ui/window"
+        caption="msg://ticketReservationScreen.caption">
+    <data>
+        <collection id="flightsDc" class="com.sample.airtickets.entity.Flight">
+            <fetchPlan extends="_base">
+                <property name="fromAirport" fetchPlan="_base"/>
+                <property name="toAirport" fetchPlan="_base"/>
+                <property name="airline" fetchPlan="_base"/>
+            </fetchPlan>
+            <loader id="flightsDl"/>
+        </collection>
+        <collection id="airportsDc" class="com.sample.airtickets.entity.Airport">
+            <fetchPlan extends="_base"/>
+            <loader id="airportsDl">
+                <query>
+                    <![CDATA[select e from Airport e]]>
+                </query>
+            </loader>
+        </collection>
+    </data>
+    <facets>
+        <dataLoadCoordinator auto="true"/>
+        <inputDialog id="ticketFields"
+                     dialogActions="OK_CANCEL"
+                     caption="Enter passenger information">
+            <parameters>
+                <stringParameter id="passengerName"
+                                 caption="Passenger name"
+                                 required="true"/>
+                <stringParameter id="passportNumber"
+                                 caption="Passport number"
+                                 required="true"/>
+                <stringParameter id="telephone"
+                                 caption="Telephone"
+                                 required="true"/>
+            </parameters>
+        </inputDialog>
+    </facets>
+    <layout expand="flightsTable" spacing="true">
+        <groupBox spacing="true"
+                  orientation="horizontal"
+                  width="AUTO"
+                  caption="msg://ticketReservationScreen.filterCaption">
+            <entityComboBox id="fromAirportEntityComboBox"
+                            caption="msg://ticketReservationScreen.fromAirport"
+                            optionsContainer="airportsDc"/>
+            <entityComboBox id="toAirportEntityComboBox"
+                            caption="msg://ticketReservationScreen.toAirport"
+                            optionsContainer="airportsDc"/>
+            <dateField id="departureDateField" caption="msg://ticketReservationScreen.departureDate"
+                       dateFormat="dd/MM/yyyy" datatype="localDate"/>
+            <button id="searchBtn"
+                    caption="msg://ticketReservationScreen.searchButton"
+                    icon="font-icon:SEARCH" align="BOTTOM_CENTER"/>
+        </groupBox>
+        <progressBar id="searchProgressBar"
+                     width="100%"
+                     visible="false"/>
+        <table id="flightsTable"
+               dataContainer="flightsDc"
+               width="100%">
+            <columns>
+                <column id="number"/>
+                <column id="fromAirport"/>
+                <column id="toAirport"/>
+                <column id="airline"/>
+                <column id="takeOffDate"/>
+                <column id="reserve" caption="Reserve"/>
+            </columns>
+        </table>
+    </layout>
+</window>
